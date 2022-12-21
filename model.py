@@ -4,19 +4,19 @@ class Categoria:
     def __init__(self, categoria):
         self.categoria = categoria
 
-class Produtos:
+class Produto:
     def __init__(self, nome, preco, categoria):
         self.nome = nome
         self.preco = preco
         self.categoria = categoria
 
 class Estoque:
-    def __init__(self, produto: Produtos, quantidade):
+    def __init__(self, produto: Produto, quantidade):
         self.produto = produto
         self.quantidade = quantidade
 
-class Vendas:
-    def __init__(self, item_vendido: Produtos, vendedor, comprador, quantidade_vendida, data = datetime.now()):
+class Venda:
+    def __init__(self, item_vendido: Produto, vendedor, comprador, quantidade_vendida, data = datetime.now().strftime('%d/%m/%Y')):
         self.item_vendido = item_vendido
         self.vendedor = vendedor
         self.comprador = comprador

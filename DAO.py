@@ -67,7 +67,8 @@ class EstoqueDao:
 
         return est
 
-class VendasDao:
+
+class VendaDao:
     @classmethod
     def salvar(cls, venda: Venda):
         with open('venda.txt', 'a') as arq:
@@ -88,6 +89,7 @@ class VendasDao:
 
         return vend
 
+
 class FornecedorDao:
     @classmethod
     def salvar(cls, fornecedor: Fornecedor):
@@ -107,6 +109,7 @@ class FornecedorDao:
             forn.append(Fornecedor(i[0], i[1], i[2], i[3]))
 
         return forn
+
 
 class PessoaDao:
     @classmethod

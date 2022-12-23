@@ -1,0 +1,5 @@
+Pera|10|Frutas|1
+Melao|20|Frutas|200
+Cereja|5|Frutas|500
+Ameixa|20|Frutas|200
+Laranja|10|Frutas|98

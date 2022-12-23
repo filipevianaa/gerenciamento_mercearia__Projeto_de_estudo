@@ -1,0 +1,4 @@
+Pera|10|Frutas|Filipe|5|Jefs|23/12/2022
+Pera|10|Frutas|Filipe|2|Jefs|23/12/2022
+Pera|10|Frutas|Filipe|2|Jefs|23/12/2022
+Laranja|10|Frutas|Filipe|2|Jefs|23/12/2022

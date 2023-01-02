@@ -1,4 +1,4 @@
-Pera|10|Frutas|Filipe|5|Jefs|23/12/2022
-Pera|10|Frutas|Filipe|2|Jefs|23/12/2022
-Pera|10|Frutas|Filipe|2|Jefs|23/12/2022
-Laranja|10|Frutas|Filipe|2|Jefs|23/12/2022
+Laranja|10|Frutas|Filipe|Jefs|2|02/01/2023
+Ameixa|20|Frutas|Vend|Comp|2|02/01/2023
+Cereja|5|Frutas|Vend|Comp|25|11/01/2023
+Cereja|5|Frutas|Vend|Comp|25|11/01/2023

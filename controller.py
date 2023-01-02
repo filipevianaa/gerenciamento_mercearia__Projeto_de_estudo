@@ -186,35 +186,56 @@ class VendaController:
 
         for i in vendas:
             nome = i.item_vendido.nome
-            quantidade = i.quantidade_vendida
+            quantidade = int(i.quantidade_vendida)
             tamanho = list(filter(lambda x: x['produto'] == nome, produtos))
             if len(tamanho) > 0:
-                produtos = list(map(lambda x: {'produto': nome, "quantidade": quantidade + x['quantidade']} if(x['produto'] == nome) else(x), produtos))
+                produtos = list(map(lambda x: {'produto': nome, "quantidade": int(x['quantidade']) + int(quantidade)} if(x['produto'] == nome) else(x), produtos))
             else:
                 produtos.append({'produto': nome, 'quantidade': quantidade})
 
 
             ordenado = sorted(produtos, key=lambda k: k['quantidade'], reverse=True)
 
-            print('Esses são os produtos mais vendidos: ')
-            for i in ordenado:
-                print('Produto: ' + i['produto'] + ' Quantidade: '+ i['quantidade'])
+        print('Esses são os produtos mais vendidos: ')
+        for i in ordenado:
+            print(f'Produto: {i["produto"]}  | Quantidade:  {i["quantidade"]}')
+
+
+    def mostrar_venda(self, data_inicio, data_termino):
+        vendas = VendaDao.ler()
+        data_inicio1 = datetime.strptime(data_inicio, '%d/%m/%Y')
+        data_termino1 = datetime.strptime(data_termino, '%d/%m/%Y')
+
+        vendas_selecionadas = list(filter(lambda x: datetime.strptime(x.data, '%d/%m/%Y') >= data_inicio1 and datetime.strptime(x.data, '%d/%m/%Y') <= data_termino1, vendas))
+
+        cont = 1
+        total = 0
+
+        print(f'### VENDAS no período de {data_inicio1} a {data_termino1} ###')
+        for i in vendas_selecionadas:
+            print(f'-------- VENDA {cont} -------- \n Nome: {i.item_vendido.nome} \n Categoria: {i.item_vendido.categoria} \n Data: {i.data} \n Quantidade: {i.quantidade_vendida} \n Preço unitário: {i.item_vendido.preco} \n Cliente: {i.comprador} \n Vendedor: {i.vendedor}')
+
+            cont += 1
+            total += int(i.item_vendido.preco) * int(i.quantidade_vendida)
+
+        print(f'O total vendido foi de R$ {total}')
 
 
 
 
 
 
-
-# a = EstoqueController()
+b = EstoqueController()
 # a.cadastrar_produto(nome, preco, categoria, quantidade)
 # a.cadastrar_produto('Melao', '20', "Frutas", '200')
 # a.cadastrar_produto('Cereja', '5', 'Frutas', '500')
 # a.cadastrar_produto('Ameixa', '20', 'Frutas', '200')
-# a.cadastrar_produto('Laranja', '10', 'Frutas', '100')
+# b.cadastrar_produto('Laranja', '10', 'Frutas', '100')
 
 a = VendaController()
 
-# a.cadastrar_venda('Laranja', 'Filipe', 'Jefs', 2)
+# a.cadastrar_venda('Cereja', 'Vend', 'Comp', 25)
 
-a.relatorio_produtos()
+# a.relatorio_produtos()
+
+# a.mostrar_venda('02/01/2023','11/01/2023')

@@ -1,5 +1,5 @@
 from model import Categoria, Produto, Estoque, Venda, Fornecedor, Pessoa, Funcionario
-from DAO import CategoriaDao, ProdutoDao, EstoqueDao, VendaDao, PessoaDao, FuncionarioDao
+from DAO import CategoriaDao, ProdutoDao, EstoqueDao, VendaDao, PessoaDao, FuncionarioDao, FornecedorDao
 from datetime import datetime
 
 class CategoriaController:
@@ -220,9 +220,159 @@ class VendaController:
 
         print(f'O total vendido foi de R$ {total}')
 
+class FornecedorController:
+    def cadastrar_fornecedor(self, nome, cnpj, telefone, categoria):
+        x = FornecedorDao.ler()
 
+        lista_cnpj = list(filter(lambda x: x.cnpj == cnpj, x))
+        lista_telefone = list(filter(lambda x: x.telefone == telefone, x))
 
+        if len(lista_cnpj) > 0:
+            print('O CNPJ já existe')
+        elif len(lista_telefone) > 0:
+            print('O telefone já existe')
+        else:
+            if len(cnpj) == 14 and len(telefone) <= 11 and len(telefone) >= 10:
+                FornecedorDao.salvar(Fornecedor(nome, cnpj, telefone, categoria))
+                print('Fornecedor cadastrado com sucesso')
+            else:
+                print('Digite um CNPJ ou telefone válido')
 
+    def alterar_fornecedor(self, nome_antigo, nome_novo, cnpj_novo, telefone_novo, categoria_novo):        
+        x = FornecedorDao.ler()
+
+        est = list(filter(lambda x: x.nome == nome_antigo, x))
+        if len(est) > 0:
+            est = list(filter(lambda x: x.cnpj == cnpj_novo, x))
+            if len(est) == 0:
+                x = list(map(lambda x: Fornecedor(nome_novo, cnpj_novo, telefone_novo, categoria_novo) if(x.nome == nome_antigo) else(x), x))
+                print('fornecedor alterado com sucesso!')
+            else:
+                print('CNPJ já existe')
+
+        else:
+            print('O fornecedor que deseja alterar não existe')
+
+        with open('fornecedor.txt', 'w') as arq:
+            for i in x:
+                arq.writelines(i.nome +'|'+ i.cnpj +'|'+ i.telefone +'|'+ str(i.categoria))
+                arq.writelines('\n')
+            
+            
+
+    def remover_fornecedor(self, nome):
+        x = FornecedorDao.ler()
+
+        est = list(filter(lambda x: x.nome == nome, x))
+        if len(est) > 0:
+            for i in range(len(x)):
+                if x[i].nome == nome:
+                    del x[i]
+                    break
+        else:
+            print('O fornecedor que deseja remover não existe')
+            return None
+
+        with open('fornecedor.txt', 'w') as arq:
+            for i in x:
+                arq.writelines(i.nome +'|'+ i.cnpj +'|'+ i.telefone +'|'+ str(i.categoria))
+                arq.writelines('\n')
+
+            print('Fornecedor removido com sucesso')
+
+    def mostrar_fornecedor(self):
+        fornecedores = FornecedorDao.ler()
+
+        if len(fornecedores) == 0:
+            print('Lista de fornecedores vazia')
+        
+        for i in fornecedores:
+            print('============= FORNECEDOR ===========')
+            print(f'Categoria fornecida: {i.categoria} \n Nome: {i.nome} \n Telefone {i.telefone} \n CNPJ: {i.cnpj}')
+
+class ClienteController:
+    def cadastrar_cliente(self, nome, telefone, cpf, email, endereco):
+        x = PessoaDao.ler()
+
+        lista_cpf = list(filter(lambda x: x.cpf == cpf, x))
+
+        if len(lista_cpf) > 0:
+            print('CPF já existe')
+        else:
+            if len(cpf) == 11 and len(telefone) >= 10 and len(telefone) <= 11:
+                PessoaDao.salvar(Pessoa(nome, telefone, cpf, email, endereco))
+                print('Cliente cadastrado com sucesso!')
+            else:
+                print('Digite um cpf ou telefone válido')
+
+    def alterar_cliente(self, nome_antigo, nome_novo, cpf_novo, telefone_novo, email_novo, endereco_novo):
+        x = PessoaDao.ler()
+
+        est = list(filter(lambda x: x.nome == nome_antigo, x))
+        if len(est) > 0:
+            x = list(map(lambda x: Pessoa(nome_novo, telefone_novo, cpf_novo, email_novo, endereco_novo) if(x.nome == nome_antigo) else(x), x))
+            print('cliente alterado com sucesso')
+        else:
+            print('O cliente que deseja alterar não existe')
+
+        with open('cliente.txt', 'w') as arq:
+            for i in x:
+                arq.writelines(i.nome +'|'+ i.telefone +'|'+ i.cpf +'|'+ i.email +'|'+ i.endereco)
+                arq.writelines('\n')
+
+    def remover_cliente(self, nome):
+        x = PessoaDao.ler()
+
+        est = list(filter(lambda x: x.nome == nome, x))
+        if len(est) > 0:
+            for i in range(len(x)):
+                if x[i].nome == nome:
+                    del x[i]
+                    print('cliente removido com sucesso')
+                    break
+
+        else:
+            print('O cliente que deseja remover não existe')
+            return None
+
+        with open ('cliente.txt', 'w') as arq:
+            for i in x:
+                arq.writelines(i.nome +'|'+ i.telefone +'|'+ i.cpf +'|'+ i.email +'|'+ i.endereco)
+                arq.writelines('\n')
+
+    def mostrar_cliente(self):
+        clientes = PessoaDao.ler()
+
+        if len(clientes) == 0:
+            print('Lista de clientes vazia')
+
+        for i in clientes:
+            print('=========== CLIENTE ============')
+            print(f'Nome: {i.nome} \n Telefone: {i.telefone} \n Endereco: {i.endereco} \n Email: {i.email} \n CPF: {i.cpf}')
+
+class FuncionarioController:
+    def cadastrar_funcionario(self, clt, nome, telefone, cpf, email, endereco):
+        x = FuncionarioDao.ler()
+
+        lista_cpf = list(filter(lambda x: x.cpf == cpf, x))
+        lista_clt = list(filter(lambda x: x.clt == clt, x))
+
+        if len(lista_cpf) > 0:
+            print('CPF já existente')
+        elif len(lista_clt) > 0:
+            print('Já existe um funcionário com essa CLT')
+        else:
+            if len(cpf) == 11 and len(telefone) >= 10 and len (telefone) <= 11:
+                FuncionarioDao.salvar(Funcionario(clt, nome, telefone, cpf, email, endereco))
+                print('Funcionário cadastrado com sucesso')
+
+            else:
+                print('Digite um CPF ou telefone válido')
+
+    def alterar_funcionario(self, nome_antigo, clt_novo, nome_novo, telefone_novo, cpf_novo, email_novo, endereco_novo):
+        x = FuncionarioDao.ler()
+
+        
 
 
 b = EstoqueController()
@@ -239,3 +389,30 @@ a = VendaController()
 # a.relatorio_produtos()
 
 # a.mostrar_venda('02/01/2023','11/01/2023')
+
+c = FornecedorController()
+
+# c.cadastrar_fornecedor('jefs caminhões', '12345678910111', 
+# '85996201459', 'Frutas')
+# c.cadastrar_fornecedor('Varejao', '12345678910987', 
+# '85996201741', 'Frutas')
+# c.cadastrar_fornecedor('Casa das frutas', '12345678910654', 
+# '85996201852', 'Frutas')
+
+# c.remover_fornecedor('Varejao')
+
+# c.alterar_fornecedor('Casa das frutas', 'Varejao', '14785236985214', '14785236985', 'Frutas')
+
+# c.mostrar_fornecedor()
+
+d = ClienteController()
+
+# d.cadastrar_cliente('Filipe', '14785236985', '14785236958', 'filipe@email.com', 'Rua rua número numero')
+# d.cadastrar_cliente('Raimundo', '14785236985', '12365478965', 'raimundo@email.com', 'Rua rua número numero')
+# d.cadastrar_cliente('Ednaldo', '14785236985', '98745632145', 'ednaldo@email.com', 'Rua rua número numero')
+
+# d.alterar_cliente('Raimundo', 'Manoel Gomes', '85236987412', '15987456321', 'manoel@email.com', 'av avenida num numero')
+
+# d.remover_cliente('Manoel Gomes')
+
+# d.mostrar_cliente()

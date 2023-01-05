@@ -93,7 +93,7 @@ class VendaDao:
 class FornecedorDao:
     @classmethod
     def salvar(cls, fornecedor: Fornecedor):
-        with open('forncedor.txt', 'a') as arq:
+        with open('fornecedor.txt', 'a') as arq:
             arq.writelines(fornecedor.nome +'|'+ fornecedor.cnpj +'|'+ fornecedor.telefone +'|'+ fornecedor.categoria)
             arq.writelines('\n')
 

@@ -372,47 +372,52 @@ class FuncionarioController:
     def alterar_funcionario(self, nome_antigo, clt_novo, nome_novo, telefone_novo, cpf_novo, email_novo, endereco_novo):
         x = FuncionarioDao.ler()
 
-        
+        est = list(filter(lambda x: x.nome == nome_antigo, x))
+        if len(est) > 0:
+            x = list(map(lambda x: Funcionario(clt_novo, nome_novo, telefone_novo, cpf_novo, email_novo, endereco_novo) if(x.nome == nome_antigo) else(x), x))
+            print('Funcionário alterado com sucesso')
+        else:
+            print('O funcionário que deseja alterar não existe')
+
+        with open ('funcionario.txt', 'w') as arq:
+            for i in x:
+                arq.writelines(i.clt +'|'+ i.nome +'|'+ i.telefone +'|'+ i.cpf +'|'+ i.email)
+                arq.writelines('\n')
+
+    def remover_funcionario(self, nome):
+        x = FuncionarioDao.ler()
+
+        est = list(filter(lambda x: x.nome == nome, x))
 
 
-b = EstoqueController()
-# a.cadastrar_produto(nome, preco, categoria, quantidade)
-# a.cadastrar_produto('Melao', '20', "Frutas", '200')
-# a.cadastrar_produto('Cereja', '5', 'Frutas', '500')
-# a.cadastrar_produto('Ameixa', '20', 'Frutas', '200')
-# b.cadastrar_produto('Laranja', '10', 'Frutas', '100')
+        if len(est) > 0:
+            for i in range(len(x)):
+                if x[i].nome == nome:
+                    del x[i]
+                    print('Funcionário removido com sucesso')
+                    break
+        else:
+            print('O funcionário que deseja remover não existe')
+            return None
 
-a = VendaController()
+        with open ('funcionario.txt', 'w') as arq:
+            for i in x:
+                arq.writelines(i.nome + "|" + i.telefone + "|" + i.cpf + "|" + i.email + "|" + i.endereco)
+                arq.writelines('\n')
 
-# a.cadastrar_venda('Cereja', 'Vend', 'Comp', 25)
+    def mostrar_funcionario(self):
+        funcionario = FuncionarioDao.ler()
 
-# a.relatorio_produtos()
+        if len(funcionario) == 0:
+            print('Lista de funcionários vazia')
 
-# a.mostrar_venda('02/01/2023','11/01/2023')
+        for i in funcionario:
+            print('========== FUNCIONÁRIO ==========')
+            print(f"Nome: {i.nome}\n"
+                f"Telefone: {i.telefone}\n"
+                f"Email: {i.email}\n"
+                f"Endereço: {i.endereco}\n"
+                f"CPF: {i.cpf}\n"
+                f"CLT: {i.clt}\n")
 
-c = FornecedorController()
 
-# c.cadastrar_fornecedor('jefs caminhões', '12345678910111', 
-# '85996201459', 'Frutas')
-# c.cadastrar_fornecedor('Varejao', '12345678910987', 
-# '85996201741', 'Frutas')
-# c.cadastrar_fornecedor('Casa das frutas', '12345678910654', 
-# '85996201852', 'Frutas')
-
-# c.remover_fornecedor('Varejao')
-
-# c.alterar_fornecedor('Casa das frutas', 'Varejao', '14785236985214', '14785236985', 'Frutas')
-
-# c.mostrar_fornecedor()
-
-d = ClienteController()
-
-# d.cadastrar_cliente('Filipe', '14785236985', '14785236958', 'filipe@email.com', 'Rua rua número numero')
-# d.cadastrar_cliente('Raimundo', '14785236985', '12365478965', 'raimundo@email.com', 'Rua rua número numero')
-# d.cadastrar_cliente('Ednaldo', '14785236985', '98745632145', 'ednaldo@email.com', 'Rua rua número numero')
-
-# d.alterar_cliente('Raimundo', 'Manoel Gomes', '85236987412', '15987456321', 'manoel@email.com', 'av avenida num numero')
-
-# d.remover_cliente('Manoel Gomes')
-
-# d.mostrar_cliente()

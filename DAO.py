@@ -142,10 +142,13 @@ class FuncionarioDao:
     @classmethod
     def ler(cls):
         with open ('funcionario.txt', 'r') as arq:
-            cls.funcionario = arq.readlines
+            cls.funcionario = arq.readlines()
             cls.funcionario = list(map(lambda x: x.replace('\n', ''), cls.funcionario))
             cls.funcionario = list(map(lambda x: x.split('|'), cls.funcionario))
 
         funci = []
         for i in cls.funcionario:
             funci.append(Funcionario(i[0], i[1], i[2], i[3], i[4], i[5]))
+
+        return funci
+

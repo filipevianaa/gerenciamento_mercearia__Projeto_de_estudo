@@ -35,6 +35,15 @@ class CategoriaController:
                     arq.writelines(i.categoria)
                     arq.writelines('\n')
 
+        estoque = EstoqueDao.ler()
+
+        estoque = list(map(lambda x: Estoque(Produto(x.produto.nome, x.produto.preco, 'Sem categoria'),x.quantidade)if(x.produto.categori == categoria_removida) else(x), estoque))
+
+        with open('estoque.txt', 'w') as arq:
+            for i in estoque:
+                arq.writelines(i.produto.nome +'|'+ i.produto.preco +'|'+ i.produto.categoria +'|'+ str(i.quantidade))
+                arq.writelines('\n')
+
     def alterar_categoria(self, categoria_antiga, categoria_alterada):
         x = CategoriaDao.ler()
 
@@ -46,6 +55,15 @@ class CategoriaController:
             if len(cat1) == 0:
                 x = list(map(lambda x: Categoria(categoria_alterada) if(x.categoria == categoria_antiga) else(x), x))
                 print(f'A categoria {categoria_antiga} foi alterada para {categoria_alterada}')
+
+                estoque = EstoqueDao.ler()
+
+                estoque = list(map(lambda x: Estoque(Produto(x.produto.nome, x.produto.preco, categoria_alterada),x.quantidade)if(x.produto.categori == categoria_antiga) else(x), estoque))
+
+                with open('estoque.txt', 'w') as arq:
+                    for i in estoque:
+                        arq.writelines(i.produto.nome +'|'+ i.produto.preco +'|'+ i.produto.categoria +'|'+ str(i.quantidade))
+                        arq.writelines('\n')
 
             else:
                 print('Já existe uma categoria com esse nome')
